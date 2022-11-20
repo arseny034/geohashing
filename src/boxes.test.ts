@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { givenHash } from './__tests__/helpers';
+import { givenHash } from '../test/helpers';
 import {
   decodeBoxBase32,
   decodeBoxInt,

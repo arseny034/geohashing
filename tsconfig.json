@@ -11,5 +11,5 @@
     "strict": true,
   },
   "include": ["src"],
-  "exclude": ["**/__tests__/*", "**/*.test.ts"]
+  "exclude": ["**/*.test.ts"]
 }

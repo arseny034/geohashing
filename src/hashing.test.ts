@@ -7,7 +7,7 @@ import {
   mergeLatLngHashes,
   splitHashToLatLng,
 } from './hashing';
-import { givenHash } from './__tests__/helpers';
+import { givenHash } from '../test/helpers';
 
 describe('hashing module', () => {
   test('splits hash into latitude and longitude hashes', () => {

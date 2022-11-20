@@ -7,7 +7,7 @@ import {
   mapDirectionToMultipliers,
 } from './neighbors';
 import { Direction } from './types';
-import { givenHash } from './__tests__/helpers';
+import { givenHash } from '../test/helpers';
 
 describe('neighbors module', () => {
   test('matches directions to multipliers properly', () => {

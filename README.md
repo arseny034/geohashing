@@ -6,6 +6,9 @@ TypeScript-written Geohash library for Node.js.
 <a href="https://www.npmjs.com/geohashing" target="_blank">
     <img alt="npm" src="https://img.shields.io/npm/v/geohashing?color=brightgreen">
 </a>
+<a href="https://github.com/arseny034/geohashing/actions/workflows/ci.yml" target="_blank">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/arseny034/geohashing/Node.js%20CI">
+</a>
 <a href="https://www.npmjs.com/geohashing" target="_blank">
     <img alt="NPM" src="https://img.shields.io/npm/l/geohashing?color=blue">
 </a>
