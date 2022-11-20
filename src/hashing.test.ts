@@ -131,4 +131,36 @@ describe('hashing module', () => {
 
     expect(() => decodeBase32(hashBase32)).toThrow(RangeError);
   });
+
+  test('encodes edge case coordinates properly', () => {
+    expect(encodeBase32(-90, 0)).toBe('h00000000');
+    expect(encodeBase32(90, 0)).toBe('upbpbpbpb');
+    expect(encodeBase32(-90, 180)).toBe('pbpbpbpbp');
+    expect(encodeBase32(90, 180)).toBe('zzzzzzzzz');
+  });
+
+  test('decodes edge case hashes properly', () => {
+    const error = { lat: 0.000021457672119140625, lng: 0.000021457672119140625 };
+
+    expect(decodeBase32('h00000000')).toEqual({
+      error,
+      lat: -89.99997854232788,
+      lng: 0.000021457672119140625,
+    });
+    expect(decodeBase32('upbpbpbpb')).toEqual({
+      error,
+      lat: 89.99997854232788,
+      lng: 0.000021457672119140625,
+    });
+    expect(decodeBase32('pbpbpbpbp')).toEqual({
+      error,
+      lat: -89.99997854232788,
+      lng: 179.99997854232788,
+    });
+    expect(decodeBase32('zzzzzzzzz')).toEqual({
+      error,
+      lat: 89.99997854232788,
+      lng: 179.99997854232788,
+    });
+  });
 });

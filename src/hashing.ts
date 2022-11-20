@@ -125,7 +125,7 @@ export function encodeCoordinate(value: number, bitDepth: number, err: number) {
 
     error /= 2;
 
-    if (remainder > 0) {
+    if (remainder >= 0) {
       bit = 1;
       remainder -= error;
     } else {
