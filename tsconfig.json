@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "incremental": false,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+  },
+  "include": ["src"],
+  "exclude": ["**/__tests__/*", "**/*.test.ts"]
+}

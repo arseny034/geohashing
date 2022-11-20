@@ -1,0 +1,24 @@
+# Coverage directory
+coverage/
+
+# Dependency directories
+node_modules/
+
+# TypeScript compilation output
+lib/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# IDE files
+.idea/
+*.iml
