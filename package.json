@@ -12,13 +12,17 @@
   "repository": "https://github.com/arseny034/geohashing",
   "homepage": "https://github.com/arseny034/geohashing#readme",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
+    "test": "jest",
     "lint": "eslint 'src/**'",
     "lint:fix": "eslint 'src/**' --fix",
-    "test": "jest"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
