@@ -48,7 +48,7 @@ export function assertLatitudeIsValid(lat: number) {
 }
 
 export function assertLongitudeIsValid(lng: number) {
-  const [min, max] = [0, LONGITUDE_MAX_VALUE];
+  const [min, max] = [-LONGITUDE_MAX_VALUE, LONGITUDE_MAX_VALUE];
   assert(lng >= min && lng <= max, new RangeError(`Longitude must be between ${min} and ${max}`));
 }
 

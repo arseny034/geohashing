@@ -107,8 +107,8 @@ describe('hashing module', () => {
 
   test('throws error due to invalid latitude or longitude', () => {
     const [lat, lng] = [37.8324, 112.5584];
-    const [tooSmallLat, toSmallLng] = [-91, -1];
-    const [tooBigLat, tooBigLng] = [91, 191];
+    const [tooSmallLat, toSmallLng] = [-91, -181];
+    const [tooBigLat, tooBigLng] = [91, 181];
 
     expect(() => encodeBase32(tooSmallLat, lng)).toThrow(RangeError);
     expect(() => encodeBase32(lat, toSmallLng)).toThrow(RangeError);
@@ -133,29 +133,59 @@ describe('hashing module', () => {
   });
 
   test('encodes edge case coordinates properly', () => {
+    expect(encodeBase32(-90, -180)).toBe('000000000');
     expect(encodeBase32(-90, 0)).toBe('h00000000');
-    expect(encodeBase32(90, 0)).toBe('upbpbpbpb');
     expect(encodeBase32(-90, 180)).toBe('pbpbpbpbp');
+    expect(encodeBase32(0, -180)).toBe('800000000');
+    expect(encodeBase32(0, 0)).toBe('s00000000');
+    expect(encodeBase32(0, 180)).toBe('xbpbpbpbp');
+    expect(encodeBase32(90, -180)).toBe('bpbpbpbpb');
+    expect(encodeBase32(90, 0)).toBe('upbpbpbpb');
     expect(encodeBase32(90, 180)).toBe('zzzzzzzzz');
   });
 
   test('decodes edge case hashes properly', () => {
     const error = { lat: 0.000021457672119140625, lng: 0.000021457672119140625 };
 
+    expect(decodeBase32('000000000')).toEqual({
+      error,
+      lat: -89.99997854232788,
+      lng: -179.99997854232788,
+    });
     expect(decodeBase32('h00000000')).toEqual({
       error,
       lat: -89.99997854232788,
-      lng: 0.000021457672119140625,
-    });
-    expect(decodeBase32('upbpbpbpb')).toEqual({
-      error,
-      lat: 89.99997854232788,
       lng: 0.000021457672119140625,
     });
     expect(decodeBase32('pbpbpbpbp')).toEqual({
       error,
       lat: -89.99997854232788,
       lng: 179.99997854232788,
+    });
+    expect(decodeBase32('800000000')).toEqual({
+      error,
+      lat: 0.000021457672119140625,
+      lng: -179.99997854232788,
+    });
+    expect(decodeBase32('s00000000')).toEqual({
+      error,
+      lat: 0.000021457672119140625,
+      lng: 0.000021457672119140625,
+    });
+    expect(decodeBase32('xbpbpbpbp')).toEqual({
+      error,
+      lat: 0.000021457672119140625,
+      lng: 179.99997854232788,
+    });
+    expect(decodeBase32('bpbpbpbpb')).toEqual({
+      error,
+      lat: 89.99997854232788,
+      lng: -179.99997854232788,
+    });
+    expect(decodeBase32('upbpbpbpb')).toEqual({
+      error,
+      lat: 89.99997854232788,
+      lng: 0.000021457672119140625,
     });
     expect(decodeBase32('zzzzzzzzz')).toEqual({
       error,
