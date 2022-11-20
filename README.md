@@ -6,11 +6,17 @@ TypeScript-written Geohash library for Node.js.
 <a href="https://www.npmjs.com/geohashing" target="_blank">
     <img alt="npm" src="https://img.shields.io/npm/v/geohashing?color=brightgreen">
 </a>
+<a href="https://www.npmjs.com/geohashing" target="_blank">
+    <img alt="NPM" src="https://img.shields.io/npm/l/geohashing?color=blue">
+</a>
 <a href="https://github.com/arseny034/geohashing/actions/workflows/ci.yml" target="_blank">
     <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/arseny034/geohashing/CI">
 </a>
-<a href="https://www.npmjs.com/geohashing" target="_blank">
-    <img alt="NPM" src="https://img.shields.io/npm/l/geohashing?color=blue">
+<a href="https://app.codacy.com/gh/arseny034/geohashing" target="_blank">
+    <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/e2a2c3470d9d446ca7e754b78acb3660/main">
+</a>
+<a href="https://app.codacy.com/gh/arseny034/geohashing" target="_blank">
+    <img alt="Codacy grade" src="https://img.shields.io/codacy/grade/e2a2c3470d9d446ca7e754b78acb3660/main">
 </a>
 
 ## Install
