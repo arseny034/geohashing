@@ -3,6 +3,9 @@ geohashing
 
 TypeScript-written Geohash library for Node.js.
 
+![npm](https://img.shields.io/npm/v/geohashing?color=brightgreen)
+![NPM](https://img.shields.io/npm/l/geohashing?color=blue)
+
 ## Usage
 
 ```typescript
