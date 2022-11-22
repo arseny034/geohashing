@@ -5,7 +5,6 @@ import {
   assertBase32HashLengthIsValid,
   base32ToInt,
   intToBase32,
-  xor,
 } from './helpers';
 import {
   BASE32_CHAR_BIT_LENGTH,
@@ -55,9 +54,7 @@ export function encodeInt(lat: number, lng: number, bitDepth: number = MAX_BIT_D
   assertLatLngIsValid(lat, lng);
   assertBitDepthIsValid(bitDepth);
 
-  const latHash = encodeLatitude(lat, Math.floor(bitDepth / 2));
-  const lngHash = encodeLongitude(lng, Math.ceil(bitDepth / 2));
-  return mergeLatLngHashes(latHash, lngHash, bitDepth);
+  return encodeIntNoValidation(lat, lng, bitDepth);
 }
 
 /**
@@ -69,68 +66,37 @@ export function encodeInt(lat: number, lng: number, bitDepth: number = MAX_BIT_D
 export function decodeInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH): Coordinates {
   assertBitDepthIsValid(bitDepth);
 
-  const { latHashInt, lngHashInt } = splitHashToLatLng(hashInt, bitDepth);
-  const lat = decodeLatitude(latHashInt, Math.floor(bitDepth / 2));
-  const lng = decodeLongitude(lngHashInt, Math.ceil(bitDepth / 2));
-
-  return {
-    lat: lat.value,
-    lng: lng.value,
-    error: {
-      lat: lat.error,
-      lng: lng.error,
-    },
-  };
+  return decodeIntNoValidation(hashInt, bitDepth);
 }
 
-export function mergeLatLngHashes(latHashInt: number, lngHashInt: number, bitDepth: number) {
+export function encodeIntNoValidation(lat: number, lng: number, bitDepth: number) {
   let hashInt = 0;
-  let [latPrefix, lngPrefix] = [latHashInt, lngHashInt];
+  let [latResidual, lngResidual] = [lat, lng];
+  let [latError, lngError] = [LATITUDE_MAX_VALUE, LONGITUDE_MAX_VALUE];
 
-  const isDepthEven = bitDepth % 2 === 0;
-
-  for (let i = 0; i < bitDepth; i++) {
-    let bit;
-    const isCurrentBitEven = i % 2 === 0;
-
-    if (xor(isDepthEven, isCurrentBitEven)) {
-      bit = lngPrefix % 2;
-      lngPrefix = Math.floor(lngPrefix / 2);
-    } else {
-      bit = latPrefix % 2;
-      latPrefix = Math.floor(latPrefix / 2);
-    }
-
-    hashInt += 2 ** i * bit;
-  }
-
-  return hashInt;
-}
-
-export function encodeLatitude(value: number, bitDepth: number) {
-  return encodeCoordinate(value, bitDepth, LATITUDE_MAX_VALUE);
-}
-
-export function encodeLongitude(value: number, bitDepth: number) {
-  return encodeCoordinate(value, bitDepth, LONGITUDE_MAX_VALUE);
-}
-
-export function encodeCoordinate(value: number, bitDepth: number, err: number) {
-  let hashInt = 0;
-  let remainder = value;
-  let error = err;
-
-  for (let i = 0; i < bitDepth; i++) {
+  for (let i = bitDepth - 1; i >= 0; i--) {
     let bit;
 
-    error /= 2;
+    if ((bitDepth - i) % 2) {
+      lngError /= 2;
 
-    if (remainder >= 0) {
-      bit = 1;
-      remainder -= error;
+      if (lngResidual >= 0) {
+        bit = 1;
+        lngResidual -= lngError;
+      } else {
+        bit = 0;
+        lngResidual += lngError;
+      }
     } else {
-      bit = 0;
-      remainder += error;
+      latError /= 2;
+
+      if (latResidual >= 0) {
+        bit = 1;
+        latResidual -= latError;
+      } else {
+        bit = 0;
+        latResidual += latError;
+      }
     }
 
     hashInt = hashInt * 2 + bit;
@@ -139,59 +105,43 @@ export function encodeCoordinate(value: number, bitDepth: number, err: number) {
   return hashInt;
 }
 
-export function splitHashToLatLng(
-  hashInt: number,
-  bitDepth: number,
-): { latHashInt: number; lngHashInt: number } {
-  let [latHashInt, lngHashInt] = [0, 0];
-  let prefix = Math.floor(hashInt);
-
-  const isDepthEven = bitDepth % 2 === 0;
-
-  for (let i = 0; i < bitDepth; i++) {
-    const bit = prefix % 2;
-    const shiftedBit = 2 ** Math.floor(i / 2) * bit;
-    const isCurrentBitEven = i % 2 === 0;
-
-    if (xor(isDepthEven, isCurrentBitEven)) {
-      lngHashInt += shiftedBit;
-    } else {
-      latHashInt += shiftedBit;
-    }
-
-    prefix = Math.floor(prefix / 2);
-  }
-
-  return { latHashInt, lngHashInt };
-}
-
-export function decodeLatitude(hashInt: number, bitDepth: number) {
-  return decodeCoordinate(hashInt, bitDepth, 0, LATITUDE_MAX_VALUE);
-}
-
-export function decodeLongitude(hashInt: number, bitDepth: number) {
-  return decodeCoordinate(hashInt, bitDepth, 0, LONGITUDE_MAX_VALUE);
-}
-
-export function decodeCoordinate(hashInt: number, bitDepth: number, mid: number, err: number) {
+export function decodeIntNoValidation(hashInt: number, bitDepth: number) {
   let tail = hashInt;
-  let value = mid;
-  let error = err;
+  let [latValue, latError] = [0, LATITUDE_MAX_VALUE];
+  let [lngValue, lngError] = [0, LONGITUDE_MAX_VALUE];
+  let exponent = 2 ** bitDepth;
 
   for (let i = bitDepth - 1; i >= 0; i--) {
-    const exponent = 2 ** i;
+    exponent /= 2;
     const bit = Math.floor(tail / exponent);
 
-    error /= 2;
+    if ((bitDepth - i) % 2) {
+      lngError /= 2;
 
-    if (bit) {
-      value += error;
+      if (bit) {
+        lngValue += lngError;
+      } else {
+        lngValue -= lngError;
+      }
     } else {
-      value -= error;
+      latError /= 2;
+
+      if (bit) {
+        latValue += latError;
+      } else {
+        latValue -= latError;
+      }
     }
 
     tail -= bit * exponent;
   }
 
-  return { value, error };
+  return {
+    lat: latValue,
+    lng: lngValue,
+    error: {
+      lat: latError,
+      lng: lngError,
+    },
+  };
 }

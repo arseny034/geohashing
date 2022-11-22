@@ -1,12 +1,12 @@
 import { describe, expect, test } from '@jest/globals';
-import { givenHash } from '../test/helpers';
+import { givenHash } from './helpers';
 import {
   decodeBoxBase32,
   decodeBoxInt,
   getHashesWithinBoxBase32,
   getHashesWithinBoxInt,
-} from './boxes';
-import { sort } from './helpers';
+} from '../src';
+import { sort } from '../src/helpers';
 
 describe('boxes module', () => {
   test('decodes box from int hash with even depth', () => {

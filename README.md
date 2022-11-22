@@ -1,7 +1,7 @@
 geohashing
 ==========
 
-TypeScript-written Geohash library for Node.js.
+TypeScript-written [Geohash](https://en.wikipedia.org/wiki/Geohash) library for Node.js.
 
 <a href="https://www.npmjs.com/geohashing" target="_blank">
     <img alt="npm" src="https://img.shields.io/npm/v/geohashing?color=brightgreen">

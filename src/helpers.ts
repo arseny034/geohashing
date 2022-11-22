@@ -57,11 +57,11 @@ export function assertLatLngIsValid(lat: number, lng: number) {
   assertLongitudeIsValid(lng);
 }
 
-export function intToBase32(intValue: number, precision: number) {
+export function intToBase32(intValue: number, length: number) {
   let hash = '';
   let prefix = intValue;
 
-  for (let i = 0; i < precision; i++) {
+  for (let i = 0; i < length; i++) {
     const code = prefix % 32;
     hash = BASE32_DIGITS[code] + hash;
     prefix = Math.floor(prefix / 32);

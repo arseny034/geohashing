@@ -1,4 +1,4 @@
-export type { Coordinates, Box, Direction } from './types';
+export { Coordinates, Box, Direction } from './types';
 export { encodeInt, decodeInt, encodeBase32, decodeBase32 } from './hashing';
 export { getNeighborInt, getNeighborBase32 } from './neighbors';
 export {

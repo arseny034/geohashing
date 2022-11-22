@@ -1,26 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import {
-  decodeInt,
-  decodeBase32,
-  encodeInt,
-  encodeBase32,
-  mergeLatLngHashes,
-  splitHashToLatLng,
-} from './hashing';
-import { givenHash } from '../test/helpers';
+import { decodeInt, decodeBase32, encodeInt, encodeBase32 } from '../src';
+import { givenHash } from './helpers';
 
 describe('hashing module', () => {
-  test('splits hash into latitude and longitude hashes', () => {
-    const [hashInt, bitDepth] = givenHash('1100011111101011100011000011111');
-    const expectedLatHashInt = parseInt('101110010010011', 2);
-    const expectedLngHashInt = parseInt('1001111110100111', 2);
-
-    const { latHashInt, lngHashInt } = splitHashToLatLng(hashInt, bitDepth);
-
-    expect(latHashInt).toBe(expectedLatHashInt);
-    expect(lngHashInt).toBe(expectedLngHashInt);
-  });
-
   test('decodes int hash with even depth', () => {
     const [hashInt, bitDepth] = givenHash('11000111111010111000110000111110');
     const [expectedLat, expectedLng] = [40.183868408203125, 44.51385498046875];
@@ -54,17 +36,6 @@ describe('hashing module', () => {
 
     expect(() => decodeInt(hashInt, tooSmallBitDepth)).toThrow(RangeError);
     expect(() => decodeInt(hashInt, tooBigBitDepth)).toThrow(RangeError);
-  });
-
-  test('merges latitude and longitude hashes into one', () => {
-    const [latHashInt, latBitDepth] = givenHash('101110010010011');
-    const [lngHashInt, lngBitDepth] = givenHash('1001111110100111');
-    const bitDepth = latBitDepth + lngBitDepth;
-    const [expectedHash] = givenHash('1100011111101011100011000011111');
-
-    const hashInt = mergeLatLngHashes(latHashInt, lngHashInt, bitDepth);
-
-    expect(hashInt).toBe(expectedHash);
   });
 
   test('encodes int hash with even depth', () => {

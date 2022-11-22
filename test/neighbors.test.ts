@@ -5,9 +5,9 @@ import {
   getNeighborsBase32,
   getNeighborsInt,
   mapDirectionToMultipliers,
-} from './neighbors';
-import { Direction } from './types';
-import { givenHash } from '../test/helpers';
+} from '../src/neighbors';
+import { Direction } from '../src';
+import { givenHash } from './helpers';
 
 describe('neighbors module', () => {
   test('matches directions to multipliers properly', () => {

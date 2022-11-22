@@ -6,7 +6,7 @@ import {
   intToBase32,
 } from './helpers';
 import { Box } from './types';
-import { decodeInt, encodeInt } from './hashing';
+import { decodeInt, encodeInt, encodeIntNoValidation } from './hashing';
 import { BASE32_CHAR_BIT_LENGTH, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
 
 /**
@@ -76,7 +76,7 @@ export function getHashesWithinBoxInt(
 
   for (let lat = latFrom + error.lat; lat < latTo; lat += latStep) {
     for (let lng = lngFrom + error.lng; lng < lngTo; lng += lngStep) {
-      hashesInt.push(encodeInt(lat, lng, bitDepth));
+      hashesInt.push(encodeIntNoValidation(lat, lng, bitDepth));
     }
   }
 
