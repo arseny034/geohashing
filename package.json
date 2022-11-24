@@ -6,7 +6,10 @@
     "geohash",
     "geohashing",
     "geocode",
-    "geocoding"
+    "geocoding",
+    "geolocation",
+    "geoposition",
+    "geojson"
   ],
   "author": "Arseny Buravlev <arseny.buravlyov@gmail.com>",
   "repository": "https://github.com/arseny034/geohashing",

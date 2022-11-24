@@ -32,8 +32,8 @@ describe('geojson module', () => {
 
     expect(rectangle.type).toBe(expectedType);
     expect(rectangle.bbox).toEqual(expectedBbox);
-    expect(rectangle.geometry.type).toBe(expectedGeometryType);
-    expect(rectangle.geometry.coordinates).toEqual(expectedGeometryCoords);
+    expect(rectangle.geometry?.type).toBe(expectedGeometryType);
+    expect(rectangle.geometry?.coordinates).toEqual(expectedGeometryCoords);
     expect(rectangle.properties).toEqual(expectedProperties);
   });
 
@@ -64,8 +64,8 @@ describe('geojson module', () => {
 
     expect(rectangle.type).toBe(expectedType);
     expect(rectangle.bbox).toEqual(expectedBbox);
-    expect(rectangle.geometry.type).toBe(expectedGeometryType);
-    expect(rectangle.geometry.coordinates).toEqual(expectedGeometryCoords);
+    expect(rectangle.geometry?.type).toBe(expectedGeometryType);
+    expect(rectangle.geometry?.coordinates).toEqual(expectedGeometryCoords);
     expect(rectangle.properties).toEqual(expectedProperties);
   });
 });

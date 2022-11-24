@@ -1,4 +1,4 @@
-export { Coordinates, Bbox, Direction, Neighbors } from './types';
+export { Coordinates, Bbox, Direction, Neighbors, GeoJsonFeature } from './types';
 export { encodeInt, decodeInt, encodeBase32, decodeBase32 } from './hashing';
 export { getNeighborInt, getNeighborBase32 } from './neighbors';
 export {
