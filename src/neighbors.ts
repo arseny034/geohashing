@@ -1,7 +1,7 @@
 import { Direction, Neighbors } from './types';
 import { assertBitDepthIsValid, base32ToInt, intToBase32 } from './helpers';
 import { decodeInt, encodeInt } from './hashing';
-import { BASE32_CHAR_BIT_LENGTH, MAX_BIT_DEPTH } from './constants';
+import { BASE32_BITS_PER_CHAR, MAX_BIT_DEPTH } from './constants';
 
 /**
  * Calculates all neighbors' Base32 Geohashes.
@@ -12,7 +12,7 @@ export function getNeighborsBase32(hashBase32: string) {
   const precision = hashBase32.length;
   const hashInt = base32ToInt(hashBase32);
 
-  const neighborsInt = getNeighborsInt(hashInt, precision * BASE32_CHAR_BIT_LENGTH);
+  const neighborsInt = getNeighborsInt(hashInt, precision * BASE32_BITS_PER_CHAR);
   const neighborsBase32Entries: [string, string][] = Object.entries(neighborsInt).map(
     ([direction, neighborHashInt]) => [direction, intToBase32(neighborHashInt, precision)],
   );
@@ -46,7 +46,7 @@ export function getNeighborsInt(hashInt: number, bitDepth: number = MAX_BIT_DEPT
 export function getNeighborBase32(hashBase32: string, direction: Direction) {
   const precision = hashBase32.length;
   const hashInt = base32ToInt(hashBase32);
-  const neighborHashInt = getNeighborInt(hashInt, direction, precision * BASE32_CHAR_BIT_LENGTH);
+  const neighborHashInt = getNeighborInt(hashInt, direction, precision * BASE32_BITS_PER_CHAR);
   return intToBase32(neighborHashInt, precision);
 }
 

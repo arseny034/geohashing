@@ -7,7 +7,7 @@ import {
 } from './helpers';
 import { Bbox } from './types';
 import { decodeInt, encodeInt, encodeIntNoValidation } from './hashing';
-import { BASE32_CHAR_BIT_LENGTH, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
+import { BASE32_BITS_PER_CHAR, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
 
 /**
  * Calculates all Geohash Base32 values within the bounding box.
@@ -36,7 +36,7 @@ export function getHashesWithinBboxBase32(
     minLng,
     maxLat,
     maxLng,
-    length * BASE32_CHAR_BIT_LENGTH,
+    length * BASE32_BITS_PER_CHAR,
   );
   return hashesInt.map((hashInt) => intToBase32(hashInt, length));
 }
@@ -90,7 +90,7 @@ export function getHashesWithinBboxInt(
  */
 export function decodeBboxBase32(hashBase32: string) {
   const hashInt = base32ToInt(hashBase32);
-  return decodeBboxInt(hashInt, hashBase32.length * BASE32_CHAR_BIT_LENGTH);
+  return decodeBboxInt(hashInt, hashBase32.length * BASE32_BITS_PER_CHAR);
 }
 
 /**

@@ -7,7 +7,7 @@ import {
   intToBase32,
 } from './helpers';
 import {
-  BASE32_CHAR_BIT_LENGTH,
+  BASE32_BITS_PER_CHAR,
   LATITUDE_MAX_VALUE,
   LONGITUDE_MAX_VALUE,
   BASE32_HASH_MAX_LENGTH,
@@ -27,7 +27,7 @@ export function encodeBase32(lat: number, lng: number, length: number = BASE32_H
   assertLatLngIsValid(lat, lng);
   assertBase32HashLengthIsValid(length);
 
-  const hashInt = encodeInt(lat, lng, length * BASE32_CHAR_BIT_LENGTH);
+  const hashInt = encodeInt(lat, lng, length * BASE32_BITS_PER_CHAR);
   return intToBase32(hashInt, length);
 }
 
@@ -38,7 +38,7 @@ export function encodeBase32(lat: number, lng: number, length: number = BASE32_H
  */
 export function decodeBase32(hashBase32: string) {
   const hashInt = base32ToInt(hashBase32);
-  return decodeInt(hashInt, hashBase32.length * BASE32_CHAR_BIT_LENGTH);
+  return decodeInt(hashInt, hashBase32.length * BASE32_BITS_PER_CHAR);
 }
 
 /**

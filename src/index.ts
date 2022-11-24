@@ -7,4 +7,5 @@ export {
   getHashesWithinBboxInt,
   getHashesWithinBboxBase32,
 } from './bboxes';
+export { hashIntToRectangle, hashBase32ToRectangle } from './geojson';
 export { intToBase32, base32ToInt } from './helpers';

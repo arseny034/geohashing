@@ -23,7 +23,10 @@ TypeScript-written [Geohash](https://en.wikipedia.org/wiki/Geohash) library for 
 ```shell
 npm install geohashing
 ```
-
+or
+```shell
+yarn add geohashing
+```
 
 ## Usage
 ```typescript
@@ -39,9 +42,20 @@ console.log(`Longitude: ${lng}±${error.lng}`);
 
 ## Support of two Geohash formats
 Geohash can be either an integer number or Base32 string (Geohash uses its own [Base32 variant](https://en.wikipedia.org/wiki/Base32#Geohash)).
-Precision of a Geohash integer is defined by bit depth which can be either even or odd,
-and must be between 1 and 52.
+Precision of a Geohash integer is defined by bit depth, which must be between 1 and 52.
 Precision of a Geohash Base32 string is defined by the string length, which must be between 1 and 9.
+
+Bit depth can be either odd or even.
+Odd bit depth results in equal latitude and longitude errors,
+which means that an encoded cell must be square.
+However, due to nonlinearity of the coordinate system, it depends on latitude a lot
+(compare [the cell at the equator](https://geojson.io/#data=data:application/json,%7B%0A%20%20%22type%22%3A%20%22Feature%22%2C%0A%20%20%22bbox%22%3A%20%5B%0A%20%20%20%2043.9947509765625%2C%0A%20%20%20%200%2C%0A%20%20%20%2044.000244140625%2C%0A%20%20%20%200.0054931640625%0A%20%20%5D%2C%0A%20%20%22geometry%22%3A%20%7B%0A%20%20%20%20%22type%22%3A%20%22Polygon%22%2C%0A%20%20%20%20%22coordinates%22%3A%20%5B%0A%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%200.0054931640625%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200.0054931640625%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%5D%0A%20%20%20%20%5D%0A%20%20%7D%2C%0A%20%20%22properties%22%3A%20%7B%0A%20%20%20%20%22lat%22%3A%200.00274658203125%2C%0A%20%20%20%20%22lng%22%3A%2043.99749755859375%2C%0A%20%20%20%20%22error%22%3A%20%7B%0A%20%20%20%20%20%20%22lat%22%3A%200.00274658203125%2C%0A%20%20%20%20%20%20%22lng%22%3A%200.00274658203125%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D)
+and [more northerly cell](https://geojson.io/#data=data:application/json,%7B%0A%20%20%22type%22%3A%20%22Feature%22%2C%0A%20%20%22bbox%22%3A%20%5B%0A%20%20%20%2043.9947509765625%2C%0A%20%20%20%2040.49560546875%2C%0A%20%20%20%2044.000244140625%2C%0A%20%20%20%2040.5010986328125%0A%20%20%5D%2C%0A%20%20%22geometry%22%3A%20%7B%0A%20%20%20%20%22type%22%3A%20%22Polygon%22%2C%0A%20%20%20%20%22coordinates%22%3A%20%5B%0A%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%2040.49560546875%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%2040.49560546875%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%2040.5010986328125%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%2040.5010986328125%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%2040.49560546875%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%5D%0A%20%20%20%20%5D%0A%20%20%7D%2C%0A%20%20%22properties%22%3A%20%7B%0A%20%20%20%20%22lat%22%3A%2040.49835205078125%2C%0A%20%20%20%20%22lng%22%3A%2043.99749755859375%2C%0A%20%20%20%20%22error%22%3A%20%7B%0A%20%20%20%20%20%20%22lat%22%3A%200.00274658203125%2C%0A%20%20%20%20%20%20%22lng%22%3A%200.00274658203125%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D)).
+
+Even bit depth results in a rectangle cell.
+Supposing we had a square cell encoded with 31 bit depth,
+encoding the same coordinates with 32 bit depth would result in half the square
+([example](https://geojson.io/#data=data:application/json,%7B%0A%20%20%22type%22%3A%20%22Feature%22%2C%0A%20%20%22bbox%22%3A%20%5B%0A%20%20%20%2043.9947509765625%2C%0A%20%20%20%200%2C%0A%20%20%20%2044.000244140625%2C%0A%20%20%20%200.00274658203125%0A%20%20%5D%2C%0A%20%20%22geometry%22%3A%20%7B%0A%20%20%20%20%22type%22%3A%20%22Polygon%22%2C%0A%20%20%20%20%22coordinates%22%3A%20%5B%0A%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2044.000244140625%2C%0A%20%20%20%20%20%20%20%20%20%200.00274658203125%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200.00274658203125%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%2043.9947509765625%2C%0A%20%20%20%20%20%20%20%20%20%200%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%5D%0A%20%20%20%20%5D%0A%20%20%7D%2C%0A%20%20%22properties%22%3A%20%7B%0A%20%20%20%20%22lat%22%3A%200.001373291015625%2C%0A%20%20%20%20%22lng%22%3A%2043.99749755859375%2C%0A%20%20%20%20%22error%22%3A%20%7B%0A%20%20%20%20%20%20%22lat%22%3A%200.001373291015625%2C%0A%20%20%20%20%20%20%22lng%22%3A%200.00274658203125%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D)).
 
 ## Encoding and decoding
 
@@ -95,7 +109,6 @@ Calculates Geohash integers of all neighbor cells. Returns a `Neghbors` object w
 }
 ```
 
-
 ### getNeighborsBase32(hashBase32)
 Calculates Geohash Base32 strings of all neighbor cells.
 Returns a `Neghbors` object similar to what `getNeighborsInt()` returns, but containing string properties instead.
@@ -136,6 +149,17 @@ Precision is required to fill the output with leading zeros if necessary.
 
 ### base32ToInt(base32Value)
 Convert a base-32 string to an integer (Geohash Base32 variant is used).
+
+## GeoJSON
+The library can convert Geohash to [GeoJSON](https://ru.wikipedia.org/wiki/GeoJSON) Feature.
+
+### hashIntToRectangle(hashInt \[, bitDepth])
+Takes a Geohash integer and bit depth and returns a GeoJSON object,
+where the encoded cell is represented by a [Polygon](https://www.rfc-editor.org/rfc/rfc7946#section-3.1.6)
+(see [example](https://geojson.io/#data=data:application/json,%7B%22type%22%3A%22Feature%22%2C%22bbox%22%3A%5B44.5111083984375%2C40.1824951171875%2C44.5166015625%2C40.18798828125%5D%2C%22geometry%22%3A%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B44.5111083984375%2C40.1824951171875%5D%2C%5B44.5166015625%2C40.1824951171875%5D%2C%5B44.5166015625%2C40.18798828125%5D%2C%5B44.5111083984375%2C40.18798828125%5D%2C%5B44.5111083984375%2C40.1824951171875%5D%5D%5D%7D%2C%22properties%22%3A%7B%22lat%22%3A40.18524169921875%2C%22lng%22%3A44.51385498046875%2C%22error%22%3A%7B%22lat%22%3A0.00274658203125%2C%22lng%22%3A0.00274658203125%7D%7D%7D)).
+
+### hashBase32ToRectangle(hashBase32)
+Takes a Geohash Base32 string and returns a GeoJSON object, like `hashIntToRectangle()` does.
 
 ## License
 geohashing is MIT licensed.
