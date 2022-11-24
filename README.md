@@ -1,5 +1,4 @@
-geohashing
-==========
+# geohashing
 
 TypeScript-written [Geohash](https://en.wikipedia.org/wiki/Geohash) library for Node.js.
 
@@ -63,7 +62,16 @@ The bigger the value, the smaller the encoded cell.
 ### decodeInt(hashInt [, bitDepth])
 
 Decodes a Geohash integer and returns an object with coordinates:
-`{ lat, lng, error: { lat, lng } }`
+```typescript
+{
+  lat: string;
+  lng: string;
+  error: {
+    lat: string;
+    lng: string;
+  } 
+}
+```
 
 ### decodeBase32(hashBase32)
 
@@ -82,32 +90,54 @@ Calculates Geohash Base32 string of a neighbor cell.
 
 ### getNeighborsInt(hashInt [, bitDepth])
 
-Calculates Geohash integers of all neighbor cells. Returns an array of 8 numbers.
+Calculates Geohash integers of all neighbor cells. Returns a `Neghbors` object with the following properties:
+```typescript
+{
+  north:     number;
+  northEast: number;
+  east:      number;
+  southEast: number;
+  south:     number;
+  southWest: number;
+  west:      number;
+  northWest: number;
+}
+```
+
 
 ### getNeighborsBase32(hashBase32)
 
-Calculates Geohash Base32 strings of all neighbor cells. Returns an array of 8 strings.
+Calculates Geohash Base32 strings of all neighbor cells.
+Returns a `Neghbors` object similar to what `getNeighborsInt()` returns, but containing string properties instead.
 
-## Boxes
+## Bounding boxes
 
-### decodeBoxInt(hashInt [, bitDepth])
+### decodeBboxInt(hashInt [, bitDepth])
 
 Calculates edge coordinates of the encoded cell.
 Takes a Geohash integer.
-Returns an object with coordinates: `{ minLat, minLng, maxLat, maxLng }`.
+Returns a `Bbox` object with coordinates: 
+```typescript
+{ 
+  minLat: number;
+  minLng: number;
+  maxLat: number;
+  maxLng: number;
+}
+```
 
-### decodeBoxBase32(hashBase32)
+### decodeBboxBase32(hashBase32)
 
 Calculates edge coordinates of the encoded cell.
 Takes a Geohash Base32 string.
-Returns an object with coordinates: `{ minLat, minLng, maxLat, maxLng }`.
+Returns a `Bbox` object similar to what `decodeBboxInt()` returns.
 
-### getHashesWithinBoxInt(minLat, minLng, maxLat, maxLng [, bitDepth])
+### getHashesWithinBboxInt(minLat, minLng, maxLat, maxLng [, bitDepth])
 
 Calculates all Geohash integer values within the box.
 Returns an array of Geohash integers.
 
-### getHashesWithinBoxBase32(minLat, minLng, maxLat, maxLng [, length])
+### getHashesWithinBboxBase32(minLat, minLng, maxLat, maxLng [, length])
 
 Calculates all Geohash Base32 values within the box.
 Returns an array of Geohash Base32 strings.

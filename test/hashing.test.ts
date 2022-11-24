@@ -1,5 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
+
 import { decodeInt, decodeBase32, encodeInt, encodeBase32 } from '../src';
+
 import { givenHash } from './helpers';
 
 describe('hashing module', () => {

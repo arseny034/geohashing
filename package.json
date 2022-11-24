@@ -20,8 +20,9 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "eslint 'src/**'",
-    "lint:fix": "eslint 'src/**' --fix",
+    "lint:fix": "eslint src/** test/** --fix",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

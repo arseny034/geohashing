@@ -5,12 +5,12 @@ import {
   base32ToInt,
   intToBase32,
 } from './helpers';
-import { Box } from './types';
+import { Bbox } from './types';
 import { decodeInt, encodeInt, encodeIntNoValidation } from './hashing';
 import { BASE32_CHAR_BIT_LENGTH, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
 
 /**
- * Calculates all Geohash Base32 values within the box.
+ * Calculates all Geohash Base32 values within the bounding box.
  * @param minLat Southwestern corner latitude
  * @param minLng Southwestern corner longitude
  * @param maxLat Northeastern corner latitude
@@ -20,7 +20,7 @@ import { BASE32_CHAR_BIT_LENGTH, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from '.
  * Must be between 1 and 9.
  * @returns Array of Geohash Base32 strings.
  */
-export function getHashesWithinBoxBase32(
+export function getHashesWithinBboxBase32(
   minLat: number,
   minLng: number,
   maxLat: number,
@@ -31,7 +31,7 @@ export function getHashesWithinBoxBase32(
   assertLatLngIsValid(maxLat, maxLng);
   assertBase32HashLengthIsValid(length);
 
-  const hashesInt = getHashesWithinBoxInt(
+  const hashesInt = getHashesWithinBboxInt(
     minLat,
     minLng,
     maxLat,
@@ -42,7 +42,7 @@ export function getHashesWithinBoxBase32(
 }
 
 /**
- * Calculates all Geohash integer values within the box.
+ * Calculates all Geohash integer values within the bounding box.
  * @param minLat Southwestern corner latitude
  * @param minLng Southwestern corner longitude
  * @param maxLat Northeastern corner latitude
@@ -52,7 +52,7 @@ export function getHashesWithinBoxBase32(
  * Can be either even or odd. Must be between 1 and 52.
  * @returns Array of Geohash integers.
  */
-export function getHashesWithinBoxInt(
+export function getHashesWithinBboxInt(
   minLat: number,
   minLng: number,
   maxLat: number,
@@ -69,8 +69,8 @@ export function getHashesWithinBoxInt(
   const { error } = decodeInt(southWestHashInt, bitDepth);
   const [latStep, lngStep] = [error.lat * 2, error.lng * 2];
 
-  const { minLat: latFrom, minLng: lngFrom } = decodeBoxInt(southWestHashInt, bitDepth);
-  const { maxLat: latTo, maxLng: lngTo } = decodeBoxInt(northEastHashInt, bitDepth);
+  const { minLat: latFrom, minLng: lngFrom } = decodeBboxInt(southWestHashInt, bitDepth);
+  const { maxLat: latTo, maxLng: lngTo } = decodeBboxInt(northEastHashInt, bitDepth);
 
   const hashesInt: number[] = [];
 
@@ -84,24 +84,24 @@ export function getHashesWithinBoxInt(
 }
 
 /**
- * Calculates edge coordinates of the encoded cell.
+ * Calculates bounding box coordinates of the encoded cell.
  * @param hashBase32 Base32 string (Geohash version of Base32)
- * @returns A {@link Box} with cells edge coordinates: `minLat`, `minLng`, `maxLat`, `maxLng`.
+ * @returns A {@link Bbox} with coordinates: `minLat`, `minLng`, `maxLat`, `maxLng`.
  */
-export function decodeBoxBase32(hashBase32: string) {
+export function decodeBboxBase32(hashBase32: string) {
   const hashInt = base32ToInt(hashBase32);
-  return decodeBoxInt(hashInt, hashBase32.length * BASE32_CHAR_BIT_LENGTH);
+  return decodeBboxInt(hashInt, hashBase32.length * BASE32_CHAR_BIT_LENGTH);
 }
 
 /**
- * Calculates edge coordinates of the encoded cell.
+ * Calculates bounding box coordinates of the encoded cell.
  * @param hashInt Geohash integer
  * @param bitDepth Defines precision of encoding.
  * The bigger the value, the smaller the encoded cell.
  * Can be either even or odd. Must be between 1 and 52.
- * @returns A {@link Box} with cells edge coordinates: `minLat`, `minLng`, `maxLat`, `maxLng`.
+ * @returns A {@link Bbox} with coordinates: `minLat`, `minLng`, `maxLat`, `maxLng`.
  */
-export function decodeBoxInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH): Box {
+export function decodeBboxInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH): Bbox {
   assertBitDepthIsValid(bitDepth);
 
   const { lat, lng, error } = decodeInt(hashInt, bitDepth);

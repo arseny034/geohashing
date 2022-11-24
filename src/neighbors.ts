@@ -1,4 +1,4 @@
-import { Direction } from './types';
+import { Direction, Neighbors } from './types';
 import { assertBitDepthIsValid, base32ToInt, intToBase32 } from './helpers';
 import { decodeInt, encodeInt } from './hashing';
 import { BASE32_CHAR_BIT_LENGTH, MAX_BIT_DEPTH } from './constants';
@@ -6,13 +6,17 @@ import { BASE32_CHAR_BIT_LENGTH, MAX_BIT_DEPTH } from './constants';
 /**
  * Calculates all neighbors' Base32 Geohashes.
  * @param hashBase32 Base32 string (Geohash version of Base32)
- * @returns Array of neighbor's Base32 Geohashes starting from North
+ * @returns A {@link Neighbors} with Base32 Geohashes starting from North
  */
 export function getNeighborsBase32(hashBase32: string) {
   const precision = hashBase32.length;
   const hashInt = base32ToInt(hashBase32);
+
   const neighborsInt = getNeighborsInt(hashInt, precision * BASE32_CHAR_BIT_LENGTH);
-  return neighborsInt.map((neighborHashInt) => intToBase32(neighborHashInt, precision));
+  const neighborsBase32Entries: [string, string][] = Object.entries(neighborsInt).map(
+    ([direction, neighborHashInt]) => [direction, intToBase32(neighborHashInt, precision)],
+  );
+  return Object.fromEntries(neighborsBase32Entries) as Neighbors<string>;
 }
 
 /**
@@ -21,12 +25,16 @@ export function getNeighborsBase32(hashBase32: string) {
  * @param bitDepth Defines precision of encoding.
  * The bigger the value, the smaller the encoded cell.
  * Can be either even or odd. Must be between 1 and 52.
- * @returns Array of neighbor's Geohash integers starting from North.
+ * @returns A {@link Neighbors} with Geohash integers starting from North.
  */
 export function getNeighborsInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH) {
   assertBitDepthIsValid(bitDepth);
 
-  return Object.values(Direction).map((direction) => getNeighborInt(hashInt, direction, bitDepth));
+  const neighborsIntEntries = Object.values(Direction).map((direction) => [
+    direction,
+    getNeighborInt(hashInt, direction, bitDepth),
+  ]);
+  return Object.fromEntries(neighborsIntEntries) as Neighbors<number>;
 }
 
 /**

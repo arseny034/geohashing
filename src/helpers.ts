@@ -9,12 +9,8 @@ import {
   BASE32_DIGITS,
 } from './constants';
 
-export function xor(a: unknown, b: unknown) {
-  return Boolean(a ? !b : b);
-}
-
-export function sort(array: number[]) {
-  return array.sort((a, b) => a - b);
+export function compare(a: number, b: number) {
+  return a - b;
 }
 
 export function assert<T, E extends Error>(

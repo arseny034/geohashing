@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
+
 import {
   getNeighborBase32,
   getNeighborInt,
@@ -7,6 +8,7 @@ import {
   mapDirectionToMultipliers,
 } from '../src/neighbors';
 import { Direction } from '../src';
+
 import { givenHash } from './helpers';
 
 describe('neighbors module', () => {
@@ -59,13 +61,20 @@ describe('neighbors module', () => {
 
   test("calculates all neighbors' int hashes", () => {
     const [hashInt, bitDepth] = givenHash('110001111110101110001100001111');
-    const expectedNeighborHashesInt = [
-      838525722, 838525744, 838525733, 838525732, 838525710, 838525708, 838525709, 838525720,
-    ];
+    const expectedNeighborsInt = {
+      north: 838525722,
+      northEast: 838525744,
+      east: 838525733,
+      southEast: 838525732,
+      south: 838525710,
+      southWest: 838525708,
+      west: 838525709,
+      northWest: 838525720,
+    };
 
     const neighborHashesInt = getNeighborsInt(hashInt, bitDepth);
 
-    expect(neighborHashesInt).toEqual(expectedNeighborHashesInt);
+    expect(neighborHashesInt).toEqual(expectedNeighborsInt);
   });
 
   test("throws error due to invalid bit depth while calculating neighbors' hashes", () => {
@@ -79,19 +88,19 @@ describe('neighbors module', () => {
 
   test("calculates all neighbors' base-32 hashes", () => {
     const hashBase32 = 'szpssgq';
-    const expectedNeighborHashesBase32 = [
-      'szpssgw',
-      'szpssgx',
-      'szpssgr',
-      'szpssgp',
-      'szpssgn',
-      'szpssgj',
-      'szpssgm',
-      'szpssgt',
-    ];
+    const expectedNeighborsBase32 = {
+      north: 'szpssgw',
+      northEast: 'szpssgx',
+      east: 'szpssgr',
+      southEast: 'szpssgp',
+      south: 'szpssgn',
+      southWest: 'szpssgj',
+      west: 'szpssgm',
+      northWest: 'szpssgt',
+    };
 
     const neighborHashesBase32 = getNeighborsBase32(hashBase32);
 
-    expect(neighborHashesBase32).toEqual(expectedNeighborHashesBase32);
+    expect(neighborHashesBase32).toEqual(expectedNeighborsBase32);
   });
 });

@@ -7,7 +7,7 @@ export interface Coordinates {
   };
 }
 
-export interface Box {
+export interface Bbox {
   minLat: number;
   minLng: number;
   maxLat: number;
@@ -15,12 +15,14 @@ export interface Box {
 }
 
 export enum Direction {
-  North = 'North',
-  NorthEast = 'NorthEast',
-  East = 'East',
-  SouthEast = 'SouthEast',
-  South = 'South',
-  SouthWest = 'SouthWest',
-  West = 'West',
-  NorthWest = 'NorthWest',
+  North = 'north',
+  NorthEast = 'northEast',
+  East = 'east',
+  SouthEast = 'southEast',
+  South = 'south',
+  SouthWest = 'southWest',
+  West = 'west',
+  NorthWest = 'northWest',
 }
+
+export type Neighbors<T extends number | string> = Record<`${Direction}`, T>;
