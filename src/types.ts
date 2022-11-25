@@ -27,24 +27,21 @@ export enum Direction {
 
 export type Neighbors<T extends number | string> = Record<`${Direction}`, T>;
 
-export type CoordinatesNDimensional = [number, number] | CoordinatesNDimensional[];
+export type GeoJsonGeometryPolygon = {
+  type: 'Polygon';
+  coordinates: [number, number][][];
+};
 
-export interface Geometry<T extends string, C extends CoordinatesNDimensional> {
-  type: T;
-  coordinates: C;
-}
+export type GeoJsonGeometryMultiPolygon = {
+  type: 'MultiPolygon';
+  coordinates: [number, number][][][];
+};
 
-export type GeoJsonGeometry =
-  | Geometry<'Point', [number, number]>
-  | Geometry<'LineString', [number, number][]>
-  | Geometry<'Polygon', [number, number][][]>
-  | Geometry<'MultiPoint', [number, number][]>
-  | Geometry<'MultiLineString', [number, number][][]>
-  | Geometry<'MultiPolygon', [number, number][][][]>;
+export type GeoJsonGeometry = GeoJsonGeometryPolygon | GeoJsonGeometryMultiPolygon;
 
-export interface GeoJsonFeature {
+export interface GeoJsonFeature<T extends GeoJsonGeometry | null = null> {
   type: 'Feature';
-  geometry: GeoJsonGeometry | null;
+  geometry: T;
   properties: Record<string, unknown> | null;
   bbox?: [number, number, number, number];
 }

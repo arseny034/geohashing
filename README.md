@@ -161,5 +161,15 @@ where the encoded cell is represented by a [Polygon](https://www.rfc-editor.org/
 ### hashBase32ToRectangle(hashBase32)
 Takes a Geohash Base32 string and returns a GeoJSON object, like `hashIntToRectangle()` does.
 
+### hashIntArrayToMultiPolygon(hashIntArray)
+Converts an array of Geohash integer/bit depth pairs to a GeoJSON object
+with [MultiPolygon](https://www.rfc-editor.org/rfc/rfc7946#section-3.1.7) geometry
+containing all rectangle areas encoded with provided hashes
+(see [example](https://geojson.io/#data=data:application/json,%7B%22type%22%3A%22Feature%22%2C%22geometry%22%3A%7B%22type%22%3A%22MultiPolygon%22%2C%22coordinates%22%3A%5B%5B%5B%5B-4.39453125%2C48.69140625%5D%2C%5B-4.3505859375%2C48.69140625%5D%2C%5B-4.3505859375%2C48.7353515625%5D%2C%5B-4.39453125%2C48.7353515625%5D%2C%5B-4.39453125%2C48.69140625%5D%5D%5D%2C%5B%5B%5B-4.39453125%2C48.62548828125%5D%2C%5B-4.3505859375%2C48.62548828125%5D%2C%5B-4.3505859375%2C48.6474609375%5D%2C%5B-4.39453125%2C48.6474609375%5D%2C%5B-4.39453125%2C48.62548828125%5D%5D%5D%2C%5B%5B%5B-4.306640625%2C48.6474609375%5D%2C%5B-4.28466796875%2C48.6474609375%5D%2C%5B-4.28466796875%2C48.66943359375%5D%2C%5B-4.306640625%2C48.66943359375%5D%2C%5B-4.306640625%2C48.6474609375%5D%5D%5D%5D%7D%2C%22properties%22%3Anull%7D)).
+
+### hashBase32ArrayToMultiPolygon(hashBase32Array)
+Converts an array of Geohash Base32 strings to a GeoJSON object,
+like `hashIntArrayToMultiPolygon()` does.
+
 ## License
 geohashing is MIT licensed.
