@@ -5,7 +5,7 @@ import {
   base32ToInt,
   intToBase32,
 } from './helpers';
-import { Bbox } from './types';
+import { Bbox, HashInt } from './types';
 import { decodeInt, encodeInt, encodeIntNoValidation } from './hashing';
 import { BASE32_BITS_PER_CHAR, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
 
@@ -84,6 +84,29 @@ export function getHashesWithinBboxInt(
 }
 
 /**
+ * Finds a Geohash Base32 string that represents the smallest cell which the given bbox fits into.
+ * @param minLat Southwestern corner latitude
+ * @param minLng Southwestern corner longitude
+ * @param maxLat Northeastern corner latitude
+ * @param maxLng Northeastern corner longitude
+ * @returns a Geohash Base32 string or `null` if the bbox cannot be represented by a Geohash
+ * as it occupies both eastern and western hemispheres
+ */
+export function encodeBboxBase32(minLat: number, minLng: number, maxLat: number, maxLng: number) {
+  const hashIntObject = encodeBboxInt(minLat, minLng, maxLat, maxLng);
+  if (!hashIntObject) {
+    return null;
+  }
+
+  const { hashInt, bitDepth } = hashIntObject;
+  const shiftOrder = bitDepth % BASE32_BITS_PER_CHAR;
+  const shiftedHashInt = Math.floor(hashInt / 2 ** shiftOrder);
+  const length = Math.floor(bitDepth / BASE32_BITS_PER_CHAR);
+
+  return intToBase32(shiftedHashInt, length);
+}
+
+/**
  * Calculates bounding box coordinates of the encoded cell.
  * @param hashBase32 Base32 string (Geohash version of Base32)
  * @returns A {@link Bbox} with coordinates: `minLat`, `minLng`, `maxLat`, `maxLng`.
@@ -91,6 +114,46 @@ export function getHashesWithinBboxInt(
 export function decodeBboxBase32(hashBase32: string) {
   const hashInt = base32ToInt(hashBase32);
   return decodeBboxInt(hashInt, hashBase32.length * BASE32_BITS_PER_CHAR);
+}
+
+/**
+ * Finds a Geohash integer that represents the smallest cell which the given bbox fits into.
+ * @param minLat Southwestern corner latitude
+ * @param minLng Southwestern corner longitude
+ * @param maxLat Northeastern corner latitude
+ * @param maxLng Northeastern corner longitude
+ * @returns a {@link HashInt} containing a Geohash integer and bit depth
+ * or `null` if the bbox cannot be represented by a Geohash as it occupies
+ * both eastern and western hemispheres
+ */
+export function encodeBboxInt(
+  minLat: number,
+  minLng: number,
+  maxLat: number,
+  maxLng: number,
+): HashInt | null {
+  assertLatLngIsValid(minLat, minLng);
+  assertLatLngIsValid(maxLat, maxLng);
+
+  const [lat, lng] = [minLat + (maxLat - minLat) / 2, minLng + (maxLng - minLng) / 2];
+  let hashInt = encodeInt(lat, lng);
+
+  for (let i = MAX_BIT_DEPTH; i > 0; i--) {
+    const bbox = decodeBboxInt(hashInt, i);
+
+    if (
+      bbox.minLat <= minLat &&
+      bbox.minLng <= minLng &&
+      bbox.maxLat >= maxLat &&
+      bbox.maxLng >= maxLng
+    ) {
+      return { hashInt, bitDepth: i };
+    }
+
+    hashInt = Math.floor(hashInt / 2);
+  }
+
+  return null;
 }
 
 /**

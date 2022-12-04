@@ -7,6 +7,11 @@ export interface Coordinates {
   };
 }
 
+export interface HashInt {
+  hashInt: number;
+  bitDepth: number;
+}
+
 export interface Bbox {
   minLat: number;
   minLng: number;
