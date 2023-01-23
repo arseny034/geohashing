@@ -6,7 +6,7 @@ import {
   intToBase32,
 } from './helpers';
 import { Bbox, HashInt } from './types';
-import { decodeInt, encodeInt, encodeIntNoValidation } from './hashing';
+import { decodeInt, decodeIntNoValidation, encodeIntNoValidation } from './hashing';
 import { BASE32_BITS_PER_CHAR, BASE32_HASH_MAX_LENGTH, MAX_BIT_DEPTH } from './constants';
 
 /**
@@ -63,14 +63,17 @@ export function getHashesWithinBboxInt(
   assertLatLngIsValid(maxLat, maxLng);
   assertBitDepthIsValid(bitDepth);
 
-  const southWestHashInt = encodeInt(minLat, minLng, bitDepth);
-  const northEastHashInt = encodeInt(maxLat, maxLng, bitDepth);
+  const southWestHashInt = encodeIntNoValidation(minLat, minLng, bitDepth);
+  const northEastHashInt = encodeIntNoValidation(maxLat, maxLng, bitDepth);
 
   const { error } = decodeInt(southWestHashInt, bitDepth);
   const [latStep, lngStep] = [error.lat * 2, error.lng * 2];
 
-  const { minLat: latFrom, minLng: lngFrom } = decodeBboxInt(southWestHashInt, bitDepth);
-  const { maxLat: latTo, maxLng: lngTo } = decodeBboxInt(northEastHashInt, bitDepth);
+  const { minLat: latFrom, minLng: lngFrom } = decodeBboxIntNoValidation(
+    southWestHashInt,
+    bitDepth,
+  );
+  const { maxLat: latTo, maxLng: lngTo } = decodeBboxIntNoValidation(northEastHashInt, bitDepth);
 
   const hashesInt: number[] = [];
 
@@ -136,10 +139,10 @@ export function encodeBboxInt(
   assertLatLngIsValid(maxLat, maxLng);
 
   const [lat, lng] = [minLat + (maxLat - minLat) / 2, minLng + (maxLng - minLng) / 2];
-  let hashInt = encodeInt(lat, lng);
+  let hashInt = encodeIntNoValidation(lat, lng, MAX_BIT_DEPTH);
 
   for (let i = MAX_BIT_DEPTH; i > 0; i--) {
-    const bbox = decodeBboxInt(hashInt, i);
+    const bbox = decodeBboxIntNoValidation(hashInt, i);
 
     if (
       bbox.minLat <= minLat &&
@@ -167,7 +170,11 @@ export function encodeBboxInt(
 export function decodeBboxInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH): Bbox {
   assertBitDepthIsValid(bitDepth);
 
-  const { lat, lng, error } = decodeInt(hashInt, bitDepth);
+  return decodeBboxIntNoValidation(hashInt, bitDepth);
+}
+
+export function decodeBboxIntNoValidation(hashInt: number, bitDepth: number): Bbox {
+  const { lat, lng, error } = decodeIntNoValidation(hashInt, bitDepth);
   return {
     minLat: lat - error.lat,
     minLng: lng - error.lng,

@@ -9,7 +9,7 @@ TypeScript-written [Geohash](https://en.wikipedia.org/wiki/Geohash) library for 
     <img alt="NPM" src="https://img.shields.io/npm/l/geohashing?color=blue">
 </a>
 <a href="https://github.com/arseny034/geohashing/actions/workflows/ci.yml" target="_blank">
-    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/arseny034/geohashing/CI">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/arseny034/geohashing/ci.yml?branch=main">
 </a>
 <a href="https://app.codacy.com/gh/arseny034/geohashing" target="_blank">
     <img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/e2a2c3470d9d446ca7e754b78acb3660/main">
@@ -90,6 +90,13 @@ Decodes a Geohash Base32 string and returns an object with coordinates like `dec
 ### getNeighborInt(hashInt, direction \[, bitDepth])
 Calculates a Geohash integer of a neighbor cell.
 `direction` specifies which neighbor should be found (e.g. northern, southwestern, etc.)
+
+```ts
+import { getNeighborInt, Direction } from 'geohashing';
+
+const neighbor = getNeighborInt(1677051423, Direction.North, 31);
+console.log(neighbor); // 1677051445
+```
 
 ### getNeighborBase32(hashBase32, direction)
 Calculates Geohash Base32 string of a neighbor cell.
