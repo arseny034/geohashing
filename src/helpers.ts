@@ -13,39 +13,32 @@ export function compare(a: number, b: number) {
   return a - b;
 }
 
-export function assert<T, E extends Error>(
-  expression: T,
-  error: E | { new (): E },
-): asserts expression {
-  if (!expression) {
-    throw typeof error === 'function' ? new error() : error;
-  }
-}
-
 export function assertBase32HashLengthIsValid(length: number) {
   const [min, max] = [BASE32_HASH_MIN_LENGTH, BASE32_HASH_MAX_LENGTH];
-  assert(
-    length >= min && length <= max,
-    new RangeError(`Number of chars must be between ${min} and ${max}`),
-  );
+  if (length < min || length > max) {
+    throw new RangeError(`Number of chars must be between ${min} and ${max}`);
+  }
 }
 
 export function assertBitDepthIsValid(bitDepth: number) {
   const [min, max] = [MIN_BIT_DEPTH, MAX_BIT_DEPTH];
-  assert(
-    bitDepth >= min && bitDepth <= max,
-    new RangeError(`Bit depth must be between ${min} and ${max}`),
-  );
+  if (bitDepth < min || bitDepth > max) {
+    throw new RangeError(`Bit depth must be between ${min} and ${max}`);
+  }
 }
 
 export function assertLatitudeIsValid(lat: number) {
   const [min, max] = [-LATITUDE_MAX_VALUE, LATITUDE_MAX_VALUE];
-  assert(lat >= min && lat <= max, new RangeError(`Latitude must be between ${min} and ${max}`));
+  if (lat < min || lat > max) {
+    throw new RangeError(`Latitude must be between ${min} and ${max}`);
+  }
 }
 
 export function assertLongitudeIsValid(lng: number) {
   const [min, max] = [-LONGITUDE_MAX_VALUE, LONGITUDE_MAX_VALUE];
-  assert(lng >= min && lng <= max, new RangeError(`Longitude must be between ${min} and ${max}`));
+  if (lng < min || lng > max) {
+    throw new RangeError(`Longitude must be between ${min} and ${max}`);
+  }
 }
 
 export function assertLatLngIsValid(lat: number, lng: number) {
