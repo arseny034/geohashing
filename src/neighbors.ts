@@ -13,7 +13,7 @@ export function getNeighborsBase32(hashBase32: string) {
   const hashInt = base32ToInt(hashBase32);
 
   const neighborsInt = getNeighborsInt(hashInt, precision * BASE32_BITS_PER_CHAR);
-  const neighborsBase32Entries: [string, string][] = Object.entries(neighborsInt).map(
+  const neighborsBase32Entries = Object.entries(neighborsInt).map<[string, string]>(
     ([direction, neighborHashInt]) => [direction, intToBase32(neighborHashInt, precision)],
   );
   return Object.fromEntries(neighborsBase32Entries) as Neighbors<string>;
@@ -30,7 +30,7 @@ export function getNeighborsBase32(hashBase32: string) {
 export function getNeighborsInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH) {
   assertBitDepthIsValid(bitDepth);
 
-  const neighborsIntEntries = Object.values(Direction).map((direction) => [
+  const neighborsIntEntries = Object.values(Direction).map<[Direction, number]>((direction) => [
     direction,
     getNeighborInt(hashInt, direction, bitDepth),
   ]);
@@ -66,7 +66,7 @@ export function getNeighborInt(
 ) {
   assertBitDepthIsValid(bitDepth);
 
-  const [latMultiplier, lngMultiplier] = mapDirectionToMultipliers(direction);
+  const [latMultiplier, lngMultiplier] = DIRECTIONS[direction];
   return translateCell(hashInt, { lat: latMultiplier, lng: lngMultiplier }, bitDepth);
 }
 
@@ -83,46 +83,13 @@ export function translateCell(
   );
 }
 
-export function mapDirectionToMultipliers(direction: Direction) {
-  let [latMultiplier, lngMultiplier] = [0, 0];
-
-  switch (direction) {
-    case Direction.West:
-      lngMultiplier = -1;
-      break;
-
-    case Direction.NorthWest:
-      latMultiplier = 1;
-      lngMultiplier = -1;
-      break;
-
-    case Direction.North:
-      latMultiplier = 1;
-      break;
-
-    case Direction.NorthEast:
-      latMultiplier = 1;
-      lngMultiplier = 1;
-      break;
-
-    case Direction.East:
-      lngMultiplier = 1;
-      break;
-
-    case Direction.SouthEast:
-      latMultiplier = -1;
-      lngMultiplier = 1;
-      break;
-
-    case Direction.South:
-      latMultiplier = -1;
-      break;
-
-    case Direction.SouthWest:
-      latMultiplier = -1;
-      lngMultiplier = -1;
-      break;
-  }
-
-  return [latMultiplier, lngMultiplier];
-}
+export const DIRECTIONS: Record<`${Direction}`, [number, number]> = {
+  [Direction.West]: [0, -1],
+  [Direction.NorthWest]: [1, -1],
+  [Direction.North]: [1, 0],
+  [Direction.NorthEast]: [1, 1],
+  [Direction.East]: [0, 1],
+  [Direction.SouthEast]: [-1, 1],
+  [Direction.South]: [-1, 0],
+  [Direction.SouthWest]: [-1, -1],
+};

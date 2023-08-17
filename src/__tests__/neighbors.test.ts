@@ -5,30 +5,11 @@ import {
   getNeighborInt,
   getNeighborsBase32,
   getNeighborsInt,
-  mapDirectionToMultipliers,
-} from '../src/neighbors';
-import { Direction } from '../src';
-
-import { givenHash } from './helpers';
+} from '../neighbors';
+import { Direction } from '../index';
+import { givenHash } from '../../test/helpers';
 
 describe('neighbors module', () => {
-  test('matches directions to multipliers properly', () => {
-    const expectedMultipliers = [
-      [1, 0],
-      [1, 1],
-      [0, 1],
-      [-1, 1],
-      [-1, 0],
-      [-1, -1],
-      [0, -1],
-      [1, -1],
-    ];
-
-    const multipliers = Object.values(Direction).map(mapDirectionToMultipliers);
-
-    expect(multipliers).toEqual(expectedMultipliers);
-  });
-
   test("calculates neighbor's int hash", () => {
     const [hashInt, bitDepth] = givenHash('110001111110101110001100001111');
     const direction = Direction.South;

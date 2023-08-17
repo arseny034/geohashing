@@ -1,9 +1,12 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { hashIntToPolygon, hashBase32ToPolygon } from '../src';
-import { hashBase32ArrayToMultiPolygon, hashIntArrayToMultiPolygon } from '../src';
-
-import { givenHash } from './helpers';
+import {
+  hashIntToPolygon,
+  hashBase32ToPolygon,
+  hashBase32ArrayToMultiPolygon,
+  hashIntArrayToMultiPolygon,
+} from '../index';
+import { givenHash } from '../../test/helpers';
 
 describe('geojson module', () => {
   test('creates geojson polygon from base-32 hash', () => {

@@ -105,7 +105,7 @@ export function encodeIntNoValidation(lat: number, lng: number, bitDepth: number
   return hashInt;
 }
 
-export function decodeIntNoValidation(hashInt: number, bitDepth: number) {
+export function decodeIntNoValidation(hashInt: number, bitDepth: number): Coordinates {
   let tail = hashInt;
   let [latValue, latError] = [0, LATITUDE_MAX_VALUE];
   let [lngValue, lngError] = [0, LONGITUDE_MAX_VALUE];

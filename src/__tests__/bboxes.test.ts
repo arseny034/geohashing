@@ -7,10 +7,9 @@ import {
   decodeBboxInt,
   getHashesWithinBboxBase32,
   getHashesWithinBboxInt,
-} from '../src';
-import { compare } from '../src/helpers';
-
-import { givenHash } from './helpers';
+} from '../index';
+import { compare } from '../helpers';
+import { givenHash } from '../../test/helpers';
 
 describe('boxes module', () => {
   test('decodes bbox from int hash with even depth', () => {
