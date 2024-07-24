@@ -92,9 +92,9 @@ Calculates a Geohash integer of a neighbor cell.
 `direction` specifies which neighbor should be found (e.g. northern, southwestern, etc.)
 
 ```ts
-import { getNeighborInt, Direction } from 'geohashing';
+import { getNeighborInt } from 'geohashing';
 
-const neighbor = getNeighborInt(1677051423, Direction.North, 31);
+const neighbor = getNeighborInt(1677051423, 'north', 31);
 console.log(neighbor); // 1677051445
 ```
 
