@@ -6,13 +6,12 @@ import {
   getNeighborsBase32,
   getNeighborsInt,
 } from '../neighbors';
-import { Direction } from '../index';
 import { givenHash } from '../../test/helpers';
 
 describe('neighbors module', () => {
   test("calculates neighbor's int hash", () => {
     const [hashInt, bitDepth] = givenHash('110001111110101110001100001111');
-    const direction = Direction.South;
+    const direction = 'south';
     const expectedNeighborHashInt = 838525710;
 
     const neighborHashInt = getNeighborInt(hashInt, direction, bitDepth);
@@ -22,7 +21,7 @@ describe('neighbors module', () => {
 
   test("throws error due to invalid bit depth while calculating neighbor's hash", () => {
     const [hashInt] = givenHash('1100011111101011100011000011111');
-    const direction = Direction.South;
+    const direction = 'south';
     const tooSmallBitDepth = 0;
     const tooBigBitDepth = 53;
 
@@ -32,7 +31,7 @@ describe('neighbors module', () => {
 
   test("calculates neighbor's base-32 hash", () => {
     const hashBase32 = 'ww8p1r4t8';
-    const direction = Direction.East;
+    const direction = 'east';
     const expectedNeighborHashBase32 = 'ww8p1r4t9';
 
     const neighborHash = getNeighborBase32(hashBase32, direction);

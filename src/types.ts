@@ -19,16 +19,15 @@ export interface Bbox {
   maxLng: number;
 }
 
-export enum Direction {
-  North = 'north',
-  NorthEast = 'northEast',
-  East = 'east',
-  SouthEast = 'southEast',
-  South = 'south',
-  SouthWest = 'southWest',
-  West = 'west',
-  NorthWest = 'northWest',
-}
+export type Direction =
+  | 'north'
+  | 'northEast'
+  | 'east'
+  | 'southEast'
+  | 'south'
+  | 'southWest'
+  | 'west'
+  | 'northWest';
 
 export type Neighbors<T extends number | string> = Record<`${Direction}`, T>;
 

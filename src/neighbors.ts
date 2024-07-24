@@ -30,7 +30,7 @@ export function getNeighborsBase32(hashBase32: string) {
 export function getNeighborsInt(hashInt: number, bitDepth: number = MAX_BIT_DEPTH) {
   assertBitDepthIsValid(bitDepth);
 
-  const neighborsIntEntries = Object.values(Direction).map<[Direction, number]>((direction) => [
+  const neighborsIntEntries = (Object.keys(DIRECTION_VECTORS) as Direction[]).map((direction) => [
     direction,
     getNeighborInt(hashInt, direction, bitDepth),
   ]);
@@ -66,7 +66,7 @@ export function getNeighborInt(
 ) {
   assertBitDepthIsValid(bitDepth);
 
-  const [latMultiplier, lngMultiplier] = DIRECTIONS[direction];
+  const [latMultiplier, lngMultiplier] = DIRECTION_VECTORS[direction];
   return translateCell(hashInt, { lat: latMultiplier, lng: lngMultiplier }, bitDepth);
 }
 
@@ -83,13 +83,13 @@ export function translateCell(
   );
 }
 
-export const DIRECTIONS: Record<`${Direction}`, [number, number]> = {
-  [Direction.West]: [0, -1],
-  [Direction.NorthWest]: [1, -1],
-  [Direction.North]: [1, 0],
-  [Direction.NorthEast]: [1, 1],
-  [Direction.East]: [0, 1],
-  [Direction.SouthEast]: [-1, 1],
-  [Direction.South]: [-1, 0],
-  [Direction.SouthWest]: [-1, -1],
+export const DIRECTION_VECTORS: Record<`${Direction}`, [number, number]> = {
+  west: [0, -1],
+  northWest: [1, -1],
+  north: [1, 0],
+  northEast: [1, 1],
+  east: [0, 1],
+  southEast: [-1, 1],
+  south: [-1, 0],
+  southWest: [-1, -1],
 };
